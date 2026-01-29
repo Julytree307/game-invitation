@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>婚礼邀请函 | 小树 & 企鹅</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #f9f0e9, #f5e6d9);
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            perspective: 1200px;
+        }
+        
+        .invitation-title {
+            margin-bottom: 30px;
+            text-align: center;
+            color: #8b0000;
+        }
+        
+        .invitation-title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .invitation-title p {
+            font-size: 1.2rem;
+            color: #666;
+            font-style: italic;
+        }
+        
+        /* 贺卡容器 */
+        .card {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 2.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+        
+        /* 打开状态 */
+        .card.open {
+            transform: rotateY(-180deg);
+        }
+        
+        /* 贺卡封面 */
+        .cover {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 5px;
+            overflow: hidden;
+            background: linear-gradient(45deg, #8b0000, #b22222);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: #fff;
+            text-align: center;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.2);
+            border: 15px solid #fff;
+        }
+        
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+        }
+        
+        .cover h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            letter-spacing: 5px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .cover .couple-names {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            line-height: 1.2;
+            font-family: 'Brush Script MT', cursive;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        }
+        
+        .cover .date {
+            font-size: 1.8rem;
+            margin-top: 20px;
+            letter-spacing: 3px;
+        }
+        
+        .cover .instruction {
+            position: absolute;
+            bottom: 90px;
+            font-size: 1.2rem;
+            opacity: 0.9;
+            animation: pulse 2s infinite;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+	/* 卡片下方的提示 */
+	.instruction.below-card {
+   		position: static;
+    		margin-top: 25px;
+    		padding: 12px 25px;
+    		background: rgba(139, 0, 0, 0.1);
+    		border-radius: 30px;
+    		font-size: 1.2rem;
+    		color: #8b0000;
+    		animation: pulse 2s infinite;
+    		text-align: center;
+    		width: fit-content;
+    		margin-left: auto;
+    		margin-right: auto;
+	}
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* 封面装饰元素 */
+        .decoration {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            opacity: 0.7;
+        }
+        
+        .decoration.top-left {
+            top: 30px;
+            left: 30px;
+            transform: rotate(-15deg);
+        }
+        
+        .decoration.top-right {
+            top: 30px;
+            right: 30px;
+            transform: rotate(15deg);
+        }
+        
+        .decoration.bottom-left {
+            bottom: 30px;
+            left: 30px;
+            transform: rotate(15deg);
+        }
+        
+        .decoration.bottom-right {
+            bottom: 30px;
+            right: 30px;
+            transform: rotate(-15deg);
+        }
+        
+        /* 内页 */
+        .inner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 5px;
+            overflow: hidden;
+            background: #fff;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            transform: rotateY(180deg);
+            border: 15px solid #8b0000;
+            box-shadow: inset 0 0 30px rgba(139, 0, 0, 0.1);
+        }
+        
+        .inner-content {
+            display: flex;
+            height: 100%;
+        }
+        
+        .left-page, .right-page {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .left-page {
+            border-right: 1px dashed #8b0000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .right-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .wedding-title {
+            font-size: 2.2rem;
+            color: #8b0000;
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: 3px;
+        }
+        
+        .wedding-info {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .details {
+            margin-top: 20px;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .detail-item i {
+            width: 30px;
+            color: #8b0000;
+            font-size: 1.3rem;
+            margin-right: 15px;
+        }
+        
+        .bride-groom {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+        }
+        
+        .person {
+            text-align: center;
+        }
+        
+        .person h3 {
+            font-size: 1.8rem;
+            color: #8b0000;
+            margin-bottom: 10px;
+        }
+        
+        .person p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+        .rsvp {
+    background: #8b0000;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s;
+    /* 在右侧页面中水平居中 */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;  /* 让按钮宽度根据内容自适应 */
+}
+
+.rsvp:hover {
+    background: #a52a2a;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .footer-note {
+            text-align: center;
+            font-style: italic;
+            color: #666;
+            margin-top: 20px;
+            font-size: 1rem;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #8b0000;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+        
+        .close-btn:hover {
+            background: #a52a2a;
+            transform: rotate(90deg);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .card {
+                height: 400px;
+            }
+            
+            .cover h2 {
+                font-size: 2rem;
+            }
+            
+            .cover .couple-names {
+                font-size: 2.5rem;
+            }
+            
+            .cover .date {
+                font-size: 1.4rem;
+            }
+            
+            .inner {
+                padding: 20px;
+            }
+            
+            .wedding-title {
+                font-size: 1.8rem;
+            }
+            
+            .inner-content {
+                flex-direction: column;
+                overflow-y: auto;
+            }
+            
+            .left-page {
+                border-right: none;
+                border-bottom: 1px dashed #8b0000;
+                padding-bottom: 20px;
+            }
+            
+            .bride-groom {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .card {
+                height: 350px;
+            }
+            
+            .cover h2 {
+                font-size: 1.6rem;
+            }
+            
+            .cover .couple-names {
+                font-size: 2rem;
+            }
+            
+            .inner {
+                padding: 15px;
+            }
+            
+            .wedding-title {
+                font-size: 1.5rem;
+            }
+            
+            .wedding-info, .detail-item {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="invitation-title">
+            <h1>游戏邀请函</h1>
+            <p>诚挚邀请您分享我们的喜悦时刻</p>
+        </div>
+        
+        <div class="card" id="weddingCard">
+            <!-- 贺卡封面 -->
+            <div class="cover">
+                <div class="decoration top-left">
+                    <i class="fas fa-heart" style="font-size: 50px; color: #ffd700;"></i>
+                </div>
+                <div class="decoration top-right">
+                    <i class="fas fa-ring" style="font-size: 50px; color: #ffd700;"></i>
+                </div>
+                
+                <h2>喜结良缘</h2>
+                <div class="couple-names">
+                    小树<br>&<br>企鹅
+                </div>
+                <div class="date">
+                    2026年1月31日
+                </div>
+                
+                <div class="decoration bottom-left">
+                    <i class="fas fa-dove" style="font-size: 50px; color: #ffd700;"></i>
+                </div>
+                <div class="decoration bottom-right">
+                    <i class="fas fa-heart" style="font-size: 50px; color: #ffd700;"></i>
+                </div>
+             
+	    	<div class="instruction">点击打开邀请函</div>  
+            </div>
+
+            
+
+            <!-- 贺卡内页 -->
+            <div class="inner">
+                <div class="close-btn" id="closeBtn">
+                    <i class="fas fa-times"></i>
+                </div>
+                
+                <div class="inner-content">
+                    <div class="left-page">
+                        <h2 class="wedding-title">游戏邀请</h2>
+                        <div class="wedding-info">
+                            谨定于公历2026年1月31日(星期六)<br>
+                            小树女士与企鹅女士举行游戏典礼<br>
+                            敬备喜宴，恭请阁下光临
+                        </div>
+                        
+                        <div class="details">
+                            <div class="detail-item">
+                                <i class="far fa-calendar-alt"></i>
+                                <div>日期：2026年1月31日 星期六</div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="far fa-clock"></i>
+                                <div>时间：晚上21:00 STEAM联机仪式</div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>游戏：双人成行</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="right-page">
+                        <div class="bride-groom">
+                            <div class="person">
+                                <h3>小梅</h3>
+                                <p>企鹅</p>
+                            </div>
+                            <div class="person">
+                                <h3>科迪</h3>
+                                <p>小树</p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <p style="text-align: center; margin-bottom: 20px; font-size: 1.1rem;">
+                                "缘定三生，携手一生"<br>
+                                我们携手走过五载章节<br>
+                                终于迎来共度游戏的时刻<br>
+                                诚邀您共同见证联机誓言
+                            </p>
+                            
+                            <div class="rsvp-container">
+                                <button class="rsvp" id="rsvpBtn">
+					<i class="far fa-paper-plane"></i> 确认出席
+                            </button>
+                        </div>
+                        
+                        <div class="footer-note">
+                            期待您的到来，共享喜悦
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px; text-align: center; color: #666; max-width: 600px;">
+            <p>温馨提示：请妥善保管此电子邀请函，届时可凭此函入场</p>
+        </div>
+    </div>
+
+    <script>
+        // 获取元素
+        const weddingCard = document.getElementById('weddingCard');
+        const closeBtn = document.getElementById('closeBtn');
+        const rsvpBtn = document.getElementById('rsvpBtn');
+        
+        // 点击贺卡打开
+        weddingCard.addEventListener('click', function(e) {
+            // 确保点击的不是关闭按钮
+            if (!e.target.closest('.close-btn') && !e.target.closest('.rsvp')) {
+                this.classList.add('open');
+            }
+        });
+        
+        // 点击关闭按钮关闭贺卡
+        closeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            weddingCard.classList.remove('open');
+        });
+        
+        // 点击确认出席按钮
+        rsvpBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            alert('感谢您确认出席！我们已经记录您的回复，期待在线上见到您！');
+        });
+        
+        // 添加键盘支持：按ESC键关闭贺卡
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                weddingCard.classList.remove('open');
+            }
+        });
+        
+        // 添加一个自动打开演示（3秒后自动打开）
+        setTimeout(() => {
+            // 仅当贺卡尚未打开时自动打开
+            if (!weddingCard.classList.contains('open')) {
+                weddingCard.classList.add('open');
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
